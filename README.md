@@ -8,6 +8,7 @@
 ## INFO
 - the software registers new accounts using my referral link, for a small fee I will tell you how to put your referral link, you can write about this in telegram chat https://t.me/petyasofts_chat
 
+## How run this software
 1. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
