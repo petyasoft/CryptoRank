@@ -1,9 +1,28 @@
-from utils.core import create_sessions
-from utils.telegram import Accounts
-from utils.cryptorank import CryptoRank
-from data.config import hello,USE_PROXY
 import asyncio
 import os
+
+from utils.core import create_sessions, logger
+from utils.telegram import Accounts
+from utils.cryptorank import CryptoRank
+from data.config import hello, USE_PROXY
+
+async def gather_tasks(accounts, proxy_dict=None):
+    tasks = []
+    for thread, account in enumerate(accounts):
+        proxy = proxy_dict.get(account) if proxy_dict else None
+        tasks.append(asyncio.create_task(CryptoRank(account=account, thread=thread, proxy=proxy).main()))
+    await asyncio.gather(*tasks)
+
+def load_proxies():
+    proxy_dict = {}
+    try:
+        with open('proxy.txt', 'r', encoding='utf-8') as file:
+            for line in file:
+                prox, name = line.strip().split()
+                proxy_dict[name] = prox
+    except Exception as e:
+        logger.error(f"Произошла ошибка: {e}")
+    return proxy_dict
 
 async def main():
     print(hello)
@@ -15,25 +34,13 @@ async def main():
     if action == 2:
         await create_sessions()
 
-    if action == 1:
+    elif action == 1:
         accounts = await Accounts().get_accounts()
-                
-        tasks = []
-        if USE_PROXY:
-            proxy_dict = {}
-            with open('proxy.txt','r',encoding='utf-8') as file:
-                proxy = [i.strip().split() for i in file.readlines() if len(i.strip().split()) == 2]
-                for prox,name in proxy:
-                    proxy_dict[name] = prox
-            for thread, account in enumerate(accounts):
-                if account in proxy_dict:
-                    tasks.append(asyncio.create_task(CryptoRank(account=account, thread=thread, proxy=proxy_dict[account]).main()))
-                else:
-                    tasks.append(asyncio.create_task(CryptoRank(account=account, thread=thread,proxy = None).main()))
-        else:
-            for thread, account in enumerate(accounts):
-                tasks.append(asyncio.create_task(CryptoRank(account=account, thread=thread,proxy = None).main()))
-        await asyncio.gather(*tasks)
+        proxy_dict = load_proxies() if USE_PROXY else None
+        await gather_tasks(accounts, proxy_dict)
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except Exception as e:
+        logger.error(f"Произошла ошибка: {e}")
