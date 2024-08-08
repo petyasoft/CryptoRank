@@ -64,6 +64,8 @@ class CryptoRank:
                         start_ts = account['farming']['timestamp']
                         if start_ts + 6*60*60*1000 < self.get_timestamp():
                             await self.end_farming()
+                            await asyncio.sleep(random.uniform(10,30))
+                            await self.start_farming()
                     elif func == "END":
                         await self.start_farming()
                 reward = await self.buddies_reward()
