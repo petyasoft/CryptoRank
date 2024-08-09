@@ -69,10 +69,6 @@ Thank you for using Blum Telegram Bot! Don't forget to follow our [Telegram chan
 
 DONATIONS
 
-Ton : UQCcEj6OWmdJ8FIvY8tVmSsGddn57PEyn438qfzbcgEZzb-O
+Ton : UQCLxqnBscAH1i8WNU2qfqXrAKCd5AoNgbuNrvZHTZOLI3Yg
 
-EVM : 0xf3eaaf294f5883DD062900E6d9c578F695b7D2D2
 
-SOL : 5tfBWHWKYuirxUS3TcdLUs7Rj9GckWPWH8gGU7v6xVby
-
-TRON : TBYhN6QbvnVsumUEV1bFXJJvQabGoFjj1m
